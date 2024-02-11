@@ -10,7 +10,31 @@
 
 using namespace shuriken::parser::dex;
 
+void DexMapList::parse_map_list(shurikenapi::IShurikenStream* stream, std::uint32_t map_off) {
+    auto my_logger = shuriken::logger();
+    auto current_offset = stream->tellg();
 
+    std::uint32_t size;
+
+    map_item item;
+
+    my_logger->info("Started parsing map_list at offset {}", map_off);
+
+    stream->seek(map_off);
+
+    // first read the size
+    stream->read_data(&size, sizeof(std::uint32_t));
+
+    for (size_t I = 0; I < size; ++I)
+    {
+        stream->read_data(&item, sizeof(map_item));
+
+        items[item.type] = {item.type, item.unused, item.size, item.offset};
+    }
+
+    my_logger->info("Finished parsing map_list");
+    stream->seek(current_offset);
+}
 
 void DexMapList::parse_map_list(common::ShurikenStream& stream, std::uint32_t map_off) {
     auto my_logger = shuriken::logger();

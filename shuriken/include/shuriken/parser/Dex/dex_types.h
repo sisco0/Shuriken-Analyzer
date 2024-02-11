@@ -214,7 +214,18 @@ namespace shuriken {
                 /// @param strings_ DexStrings to retrieve the raw name of the DexTypes
                 /// @param offset_types offset in the file where DexTypes are
                 /// @param n_of_types number of DexTypes to read
+                /// @deprecated refactoring in progress
                 void parse_types(common::ShurikenStream& shurikenStream,
+                                 DexStrings& strings_,
+                                 std::uint32_t offset_types,
+                                 std::uint32_t n_of_types);
+
+                /// @brief Parse all the DexTypes from the DVM
+                /// @param shurikenStream stream where to read the DVM DexTypes
+                /// @param strings_ DexStrings to retrieve the raw name of the DexTypes
+                /// @param offset_types offset in the file where DexTypes are
+                /// @param n_of_types number of DexTypes to read
+                void parse_types(shurikenapi::IShurikenStream* shurikenStream,
                                  DexStrings& strings_,
                                  std::uint32_t offset_types,
                                  std::uint32_t n_of_types);

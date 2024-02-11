@@ -21,6 +21,36 @@ namespace {
     }
 }
 
+void DexStrings::parse_strings(shurikenapi::IShurikenStream* shuriken_stream,
+                               std::uint32_t strings_offset,
+                               std::uint32_t n_of_strings) {
+    auto my_logger = shuriken::logger();
+    my_logger->info("Start parsing strings");
+
+    auto current_offset = shuriken_stream->tellg();
+    std::uint32_t str_offset; // we will read offsets
+
+    // move pointer to the given offset
+    shuriken_stream->seek_safe(strings_offset);
+
+    // read the DexStrings by offset
+    for (size_t I = 0; I < n_of_strings; ++I) {
+        shuriken_stream->read_data(&str_offset, sizeof(std::uint32_t));
+
+        if (str_offset > shuriken_stream->get_file_size())
+            throw std::runtime_error("Error string offset out of bound");
+
+        dex_strings.emplace_back(shuriken_stream->read_dex_string(str_offset));
+    }
+    // create a string_view version of the DexStrings
+    for (auto & str : dex_strings) {
+        dex_strings_view.emplace_back(str);
+    }
+
+    shuriken_stream->seek(current_offset);
+    my_logger->info("Finished parsing strings");
+}
+
 void DexStrings::parse_strings(common::ShurikenStream& shuriken_stream,
                                std::uint32_t strings_offset,
                                std::uint32_t n_of_strings) {

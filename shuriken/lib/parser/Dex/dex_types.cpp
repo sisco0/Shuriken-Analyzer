@@ -50,6 +50,32 @@ std::unique_ptr<DVMType> DexTypes::parse_type(std::string_view name) {
     }
 }
 
+void DexTypes::parse_types(shurikenapi::IShurikenStream* shurikenStream,
+                           DexStrings& strings_,
+                           std::uint32_t offset_types,
+                           std::uint32_t n_of_types) {
+    auto my_logger = shuriken::logger();
+    my_logger->info("Start parsing types");
+
+    auto current_offset = shurikenStream->tellg();
+
+    std::unique_ptr<DVMType> type;
+    std::uint32_t type_id;
+
+    shurikenStream->seek(offset_types);
+
+    for (size_t I = 0; I < n_of_types; ++I) {
+        shurikenStream->read_data(&type_id, sizeof(std::uint32_t));
+
+        type = parse_type(strings_.get_string_by_id(type_id));
+
+        ordered_types.push_back(std::move(type));
+    }
+
+    shurikenStream->seek(current_offset);
+    my_logger->info("Finished parsing types");
+}
+
 void DexTypes::parse_types(common::ShurikenStream& shurikenStream,
                            DexStrings& strings_,
                            std::uint32_t offset_types,

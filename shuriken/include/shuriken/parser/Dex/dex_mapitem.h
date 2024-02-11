@@ -10,6 +10,7 @@
 #ifndef SHURIKENLIB_DEX_MAPITEM_H
 #define SHURIKENLIB_DEX_MAPITEM_H
 
+#include "shuriken_api/shuriken.h"
 #include "shuriken/common/shurikenstream.h"
 #include "shuriken/common/iterator_range.h"
 #include <unordered_map>
@@ -96,7 +97,13 @@ namespace shuriken {
                 /// @brief Parse the map list from the DEX file to create the map
                 /// @param stream DEX file content
                 /// @param map_off offset to the map_list
+                /// @deprecated refactoring in progress
                 void parse_map_list(common::ShurikenStream& stream, std::uint32_t map_off);
+
+                /// @brief Parse the map list from the DEX file to create the map
+                /// @param stream DEX file content
+                /// @param map_off offset to the map_list
+                void parse_map_list(shurikenapi::IShurikenStream* stream, std::uint32_t map_off);
 
                 it_map_data  get_map_items();
 

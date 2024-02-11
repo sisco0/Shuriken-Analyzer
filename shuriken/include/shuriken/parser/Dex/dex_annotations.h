@@ -9,6 +9,7 @@
 #ifndef SHURIKENLIB_DEX_ANNOTATIONS_H
 #define SHURIKENLIB_DEX_ANNOTATIONS_H
 
+#include "shuriken_api/shuriken.h"
 #include "shuriken/common/iterator_range.h"
 #include "shuriken/common/shurikenstream.h"
 
@@ -73,7 +74,12 @@ namespace shuriken {
 
                 /// @brief Parse the annotation directory item
                 /// @param stream stream with the DEX file
+                /// @deprecated refactoring in progress
                 void parse_annotation_directory_item(common::ShurikenStream& stream);
+
+                /// @brief Parse the annotation directory item
+                /// @param stream stream with the DEX file
+                void parse_annotation_directory_item(shurikenapi::IShurikenStream* stream);
 
                 it_field_annotations get_field_annotations();
 

@@ -8,6 +8,7 @@
 #ifndef SHURIKENLIB_DEX_STRINGS_H
 #define SHURIKENLIB_DEX_STRINGS_H
 
+#include "shuriken_api/shuriken.h"
 #include "shuriken/common/shurikenstream.h"
 #include <vector>
 #include <string>
@@ -39,7 +40,16 @@ namespace shuriken {
                 /// @param shuriken_stream stream with the dex file
                 /// @param strings_offset offset in the file where DexStrings are
                 /// @param n_of_strings number of DexStrings to read
+                /// @deprecated refactoring in progress
                 void parse_strings(common::ShurikenStream& shuriken_stream,
+                                   std::uint32_t strings_offset,
+                                   std::uint32_t n_of_strings);
+
+                /// @brief Function to parse the DexStrings from the dex file
+                /// @param shuriken_stream stream with the dex file
+                /// @param strings_offset offset in the file where DexStrings are
+                /// @param n_of_strings number of DexStrings to read
+                void parse_strings(shurikenapi::IShurikenStream* shuriken_stream,
                                    std::uint32_t strings_offset,
                                    std::uint32_t n_of_strings);
 

@@ -16,6 +16,35 @@ using it_params = shuriken::iterator_range<parameters_type_t::iterator>;
 using it_const_params = shuriken::iterator_range<const parameters_type_t::iterator>;
 
 void ProtoID::parse_parameters(
+        shurikenapi::IShurikenStream* stream,
+        DexTypes& types,
+        std::uint32_t parameters_off) {
+    auto my_logger = shuriken::logger();
+    auto current_offset = stream->tellg();
+    std::uint32_t n_parameters;
+    std::uint16_t type_id;
+
+    if (!parameters_off)
+        return;
+
+    my_logger->debug("Started parsing parameter at offset {}", parameters_off);
+
+    stream->seek(parameters_off);
+
+    // read the number of parameters
+    stream->read_data(&n_parameters, sizeof(std::uint32_t));
+
+    for (std::uint32_t I = 0; I < n_parameters; ++I) {
+        stream->read_data(&type_id, sizeof(std::uint16_t));
+        parameters.push_back(types.get_type_by_id(type_id));
+    }
+
+    my_logger->debug("Finished parsing parameter at offset{}", parameters_off);
+
+    stream->seek(current_offset);
+}
+
+void ProtoID::parse_parameters(
         common::ShurikenStream& stream,
         DexTypes& types,
         std::uint32_t parameters_off) {
@@ -42,6 +71,17 @@ void ProtoID::parse_parameters(
     my_logger->debug("Finished parsing parameter at offset{}", parameters_off);
 
     stream.seekg(current_offset, std::ios_base::beg);
+}
+
+ProtoID::ProtoID(
+        shurikenapi::IShurikenStream* stream,
+        DexTypes& types,
+        std::string_view shorty_idx,
+        std::uint32_t return_type_idx,
+        std::uint32_t parameters_off)
+        : shorty_idx(shorty_idx), return_type(types.get_type_by_id(return_type_idx))
+{
+    parse_parameters(stream, types, parameters_off);
 }
 
 ProtoID::ProtoID(
@@ -82,6 +122,38 @@ it_const_params ProtoID::get_parameters_const(){
 using protos_id_t = std::vector<std::unique_ptr<ProtoID>>;
 using it_protos = shuriken::iterator_range<protos_id_t::iterator>;
 using it_const_protos = shuriken::iterator_range<const protos_id_t::iterator>;
+
+void DexProtos::parse_protos(shurikenapi::IShurikenStream* stream,
+                             std::uint32_t number_of_protos,
+                             std::uint32_t offset,
+                             DexStrings& strings,
+                             DexTypes& types) {
+    auto my_logger = shuriken::logger();
+    auto current_offset = stream->tellg();
+
+    std::unique_ptr<ProtoID> proto = nullptr;
+    std::uint32_t shorty_idx = 0, //! id for prototype string
+    return_type_idx = 0,      //! id for type of return
+    parameters_off = 0;       //! offset of parameters
+
+    my_logger->info("Started parsing of protos");
+
+    stream->seek(offset);
+
+    for (size_t I = 0; I < number_of_protos; ++I) {
+        stream->read_data(&shorty_idx, sizeof(std::uint32_t));
+        stream->read_data(&return_type_idx, sizeof(std::uint32_t));
+        stream->read_data(&parameters_off, sizeof(std::uint32_t));
+
+        proto = std::make_unique<ProtoID>(stream, types, strings.get_string_by_id(shorty_idx),
+                                          return_type_idx, parameters_off);
+        protos.push_back(std::move(proto));
+    }
+
+    my_logger->info("Finished parsing of protos");
+
+    stream->seek(current_offset);
+}
 
 void DexProtos::parse_protos(common::ShurikenStream& stream,
                              std::uint32_t number_of_protos,

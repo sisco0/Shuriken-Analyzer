@@ -85,8 +85,21 @@ namespace shuriken {
                 /// @param stream file where to read the fields
                 /// @param types types to retrieve information
                 /// @param strings strings to retrieve information
+                /// @deprecated refactoring in progress
                 void parse_fields(
                         common::ShurikenStream& stream,
+                        DexTypes& types,
+                        DexStrings& strings,
+                        std::uint32_t fields_offset,
+                        std::uint32_t n_of_fields);
+
+                /// @brief Function for parsing all the fields from
+                /// a dex file
+                /// @param stream file where to read the fields
+                /// @param types types to retrieve information
+                /// @param strings strings to retrieve information
+                void parse_fields(
+                        shurikenapi::IShurikenStream* stream,
                         DexTypes& types,
                         DexStrings& strings,
                         std::uint32_t fields_offset,

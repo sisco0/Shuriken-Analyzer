@@ -54,7 +54,12 @@ namespace shuriken {
 
                 /// @brief parse the dex file from the stream
                 /// @param stream stream from where to retrieve the dex data
+                /// @deprecated refactoring in progress
                 void parse_dex(common::ShurikenStream& stream);
+
+                /// @brief parse the dex file from the stream
+                /// @param stream stream from where to retrieve the dex data
+                void parse_dex(shurikenapi::IShurikenStream* stream);
 
                 DexHeader& get_header();
 

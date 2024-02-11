@@ -85,8 +85,24 @@ namespace shuriken {
                 /// @param strings strings objects
                 /// @param methods_offset offset to the ids of the methods
                 /// @param methods_size number of methods to read
+                /// @deprecated refactoring in progress
                 void parse_methods(
                         common::ShurikenStream& stream,
+                        DexTypes& types,
+                        DexProtos& protos,
+                        DexStrings& strings,
+                        std::uint32_t methods_offset,
+                        std::uint32_t methods_size
+                );
+
+                /// @brief Parse all the method ids objects.
+                /// @param stream stream with the dex file
+                /// @param types types objects
+                /// @param strings strings objects
+                /// @param methods_offset offset to the ids of the methods
+                /// @param methods_size number of methods to read
+                void parse_methods(
+                        shurikenapi::IShurikenStream* stream,
                         DexTypes& types,
                         DexProtos& protos,
                         DexStrings& strings,

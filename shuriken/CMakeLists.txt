@@ -98,7 +98,8 @@ if (DEX)
 
     target_include_directories(dex-obj
             BEFORE
-            PUBLIC ${SHURIKEN_INCLUDE_PATH}
+            PUBLIC "${CMAKE_SOURCE_DIR}/shuriken/include/"
+            PUBLIC "${CMAKE_SOURCE_DIR}/shuriken/include/public/"
     )
 
     list(APPEND LIB_MODULES
@@ -107,7 +108,8 @@ if (DEX)
 endif ()
 
 message(STATUS "Generating Shuriken shared library")
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON) # TODO: depreciate
+add_definitions("-DSHURIKENLIB_EXPORTS")
 add_library(shuriken SHARED
         ${LIB_MODULES}
 )
@@ -116,8 +118,8 @@ message(STATUS "Linking libraries into Shuriken library")
 
 target_link_libraries(shuriken PRIVATE spdlog::spdlog)
 target_include_directories(shuriken
-        PUBLIC
-        "${CMAKE_SOURCE_DIR}/shuriken/include/"
+        PUBLIC "${CMAKE_SOURCE_DIR}/shuriken/include/"
+        PUBLIC "${CMAKE_SOURCE_DIR}/shuriken/include/public/"
 )
 #############################################################
 include(CTest)

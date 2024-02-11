@@ -53,7 +53,18 @@ namespace shuriken {
                 /// @param fields fields of the DEX file
                 /// @param methods methods of the DEX file
                 /// @param types types of the DEX file
+                /// @deprecated refactoring in progress
                 void parse_class_data_item(common::ShurikenStream& stream,
+                                           DexFields& fields,
+                                           DexMethods& methods,
+                                           DexTypes& types);
+
+                /// @brief Method to parse the ClassDataItem
+                /// @param stream stream DEX file
+                /// @param fields fields of the DEX file
+                /// @param methods methods of the DEX file
+                /// @param types types of the DEX file
+                void parse_class_data_item(shurikenapi::IShurikenStream* stream,
                                            DexFields& fields,
                                            DexMethods& methods,
                                            DexTypes& types);
@@ -160,7 +171,21 @@ namespace shuriken {
                 /// @param types types of the DEX file
                 /// @param fields fields of the DEX file
                 /// @param methods methods of the DEX file
+                /// @deprecated refactoring in progress
                 void parse_class_def(common::ShurikenStream& stream,
+                                     DexStrings& strings,
+                                     DexTypes& types,
+                                     DexFields& fields,
+                                     DexMethods& methods);
+
+                /// @brief Parse the current ClassDef for that we will parse the
+                /// classdef_t structure, and then all the other fields.
+                /// @param stream stream with DEX file currently parsed
+                /// @param strings strings of the DEX file
+                /// @param types types of the DEX file
+                /// @param fields fields of the DEX file
+                /// @param methods methods of the DEX file
+                void parse_class_def(shurikenapi::IShurikenStream* stream,
                                      DexStrings& strings,
                                      DexTypes& types,
                                      DexFields& fields,
@@ -236,7 +261,24 @@ namespace shuriken {
                 /// @param types types from the DEX file
                 /// @param fields fields from the DEX file
                 /// @param methods methods from the DEX file
+                /// @deprecated refactoring in progress
                 void parse_classes(common::ShurikenStream& stream,
+                                   std::uint32_t number_of_classes,
+                                   std::uint32_t offset,
+                                   DexStrings& strings,
+                                   DexTypes& types,
+                                   DexFields& fields,
+                                   DexMethods& methods);
+
+                /// @brief Parse all the classes from the DEX files
+                /// @param stream stream with the DEX file
+                /// @param number_of_classes number of classes from the DEX
+                /// @param offset offset to parse the classes
+                /// @param strings strings from the DEX file
+                /// @param types types from the DEX file
+                /// @param fields fields from the DEX file
+                /// @param methods methods from the DEX file
+                void parse_classes(shurikenapi::IShurikenStream* stream,
                                    std::uint32_t number_of_classes,
                                    std::uint32_t offset,
                                    DexStrings& strings,

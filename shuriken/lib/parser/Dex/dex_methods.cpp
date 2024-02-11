@@ -32,6 +32,45 @@ std::string MethodID::pretty_method()  {
 }
 
 void DexMethods::parse_methods(
+        shurikenapi::IShurikenStream* stream,
+        DexTypes& types,
+        DexProtos& protos,
+        DexStrings& strings,
+        std::uint32_t methods_offset,
+        std::uint32_t methods_size
+) {
+    auto my_logger = shuriken::logger();
+    auto current_offset = stream->tellg();
+    std::uint16_t class_idx;
+    std::uint16_t proto_idx;
+    std::uint32_t name_idx;
+
+    std::unique_ptr<MethodID> method_id;
+
+    my_logger->info("Started parsing methods at offset {}", methods_offset);
+
+    stream->seek(methods_offset);
+
+    for (size_t I = 0; I < methods_size; ++I) {
+        stream->read_data(&class_idx, sizeof(std::uint16_t));
+        stream->read_data(&proto_idx, sizeof(std::uint16_t));
+        stream->read_data(&name_idx, sizeof(std::uint32_t));
+
+        // create method id
+        method_id = std::make_unique<MethodID>(
+                types.get_type_by_id(class_idx),
+                protos.get_proto_by_id(proto_idx),
+                strings.get_string_by_id(name_idx)
+                );
+        method_ids.push_back(std::move(method_id));
+    }
+
+    my_logger->info("Finshed parsing methods");
+
+    stream->seek(current_offset);
+}
+
+void DexMethods::parse_methods(
         common::ShurikenStream& stream,
         DexTypes& types,
         DexProtos& protos,

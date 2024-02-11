@@ -8,6 +8,7 @@
 #ifndef SHURIKENLIB_DEX_HEADER_H
 #define SHURIKENLIB_DEX_HEADER_H
 
+#include "shuriken_api/shuriken.h"
 #include "shuriken/common/shurikenstream.h"
 #include <iostream>
 #include <cstring>
@@ -64,7 +65,13 @@ namespace shuriken {
 
                 /// @brief Parse the header from a ShurikenStream file
                 /// @param stream ShurikenStream where to read the header.
+                /// @deprecated refactoring in progress
                 void parse_header(common::ShurikenStream& stream);
+
+                /// @brief Parse the header from a ShurikenStream file
+                /// @param stream ShurikenStream where to read the header.
+                void parse_header(shurikenapi::IShurikenStream* stream);
+
 
                 /// @brief Dump the content of the header to a file in XML format
                 /// @param fos XML file where to write the content

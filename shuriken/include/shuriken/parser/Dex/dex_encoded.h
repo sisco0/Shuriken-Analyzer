@@ -10,6 +10,7 @@
 #ifndef SHURIKENLIB_DEX_ENCODED_H
 #define SHURIKENLIB_DEX_ENCODED_H
 
+#include "shuriken_api/shuriken.h"
 #include "shuriken/common/shurikenstream.h"
 #include "shuriken/common/iterator_range.h"
 #include "shuriken/parser/Dex/dex_strings.h"
@@ -50,7 +51,16 @@ namespace shuriken {
                 /// @param stream stream where to read data
                 /// @param types object with types for parsing encoded array
                 /// @param strings object with strings for parsing encoded array
+                /// @deprecated refactoring in progress
                 void parse_encoded_array(common::ShurikenStream & stream,
+                                         DexTypes & types,
+                                         DexStrings & strings);
+
+                /// @brief Parse the encoded Array
+                /// @param stream stream where to read data
+                /// @param types object with types for parsing encoded array
+                /// @param strings object with strings for parsing encoded array
+                void parse_encoded_array(shurikenapi::IShurikenStream* stream,
                                          DexTypes & types,
                                          DexStrings & strings);
 
@@ -107,7 +117,16 @@ namespace shuriken {
                 /// @param stream stream with the DEX file
                 /// @param types types for parsing the encoded annotation
                 /// @param strings strings for parsing the encoded annotation
+                /// @deprecated refactoring in progress
                 void parse_encoded_annotation(common::ShurikenStream & stream,
+                                              DexTypes & types,
+                                              DexStrings & strings);
+
+                /// @brief Function to parse an encoded annotation
+                /// @param stream stream with the DEX file
+                /// @param types types for parsing the encoded annotation
+                /// @param strings strings for parsing the encoded annotation
+                void parse_encoded_annotation(shurikenapi::IShurikenStream* stream,
                                               DexTypes & types,
                                               DexStrings & strings);
 
@@ -151,6 +170,10 @@ namespace shuriken {
                 default;
 
                 void parse_encoded_value(common::ShurikenStream & stream,
+                                         DexTypes & types,
+                                         DexStrings & strings);
+
+                void parse_encoded_value(shurikenapi::IShurikenStream* stream,
                                          DexTypes & types,
                                          DexStrings & strings);
 
@@ -256,7 +279,14 @@ namespace shuriken {
                 /// @brief Parse all the encoded type pairs
                 /// @param stream stream with DEX data
                 /// @param types types for the EncodedTypePair
+                /// @deprecated refactoring in progress
                 void parse_encoded_catch_handler(common::ShurikenStream& stream,
+                                                 DexTypes& types);
+
+                /// @brief Parse all the encoded type pairs
+                /// @param stream stream with DEX data
+                /// @param types types for the EncodedTypePair
+                void parse_encoded_catch_handler(shurikenapi::IShurikenStream* stream,
                                                  DexTypes& types);
 
                 /// @brief Check value of size to test if there are encodedtypepairs
@@ -336,7 +366,14 @@ namespace shuriken {
                 /// @brief Parser for the CodeItemStruct
                 /// @param stream DEX file where to read data
                 /// @param types types of the DEX
+                /// @deprecated refactoring in progress
                 void parse_code_item_struct(common::ShurikenStream& stream,
+                                            DexTypes& types);
+
+                /// @brief Parser for the CodeItemStruct
+                /// @param stream DEX file where to read data
+                /// @param types types of the DEX
+                void parse_code_item_struct(shurikenapi::IShurikenStream* stream,
                                             DexTypes& types);
 
                 /// @brief Get the number of registers used in a method
@@ -400,7 +437,16 @@ namespace shuriken {
                 /// @param stream stream with DEX file
                 /// @param code_off offset where code item struct
                 /// @param types types from the DEX
+                /// @deprecated refactoring in progress
                 void parse_encoded_method(common::ShurikenStream& stream,
+                                          std::uint64_t code_off,
+                                          DexTypes& types);
+
+                /// @brief Parse the encoded method, this will parse the code item
+                /// @param stream stream with DEX file
+                /// @param code_off offset where code item struct
+                /// @param types types from the DEX
+                void parse_encoded_method(shurikenapi::IShurikenStream* stream,
                                           std::uint64_t code_off,
                                           DexTypes& types);
 

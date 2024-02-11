@@ -63,13 +63,31 @@ namespace shuriken {
                 /// @param stream stream where to read the information
                 /// @param types where to extract the information
                 /// @param parameters_off offset where to read the parameters
+                /// @deprecated refactoring in progress
                 void parse_parameters(
                         common::ShurikenStream& stream,
+                        DexTypes& types,
+                        std::uint32_t parameters_off);
+
+                /// @brief Parse the parameters from the stream
+                /// each parameter will contain one type id
+                /// @param stream stream where to read the information
+                /// @param types where to extract the information
+                /// @param parameters_off offset where to read the parameters
+                void parse_parameters(
+                        shurikenapi::IShurikenStream* stream,
                         DexTypes& types,
                         std::uint32_t parameters_off);
             public:
                 ProtoID(
                         common::ShurikenStream& stream,
+                        DexTypes& types,
+                        std::string_view shorty_idx,
+                        std::uint32_t return_type_idx,
+                        std::uint32_t parameters_off);
+
+                ProtoID(
+                        shurikenapi::IShurikenStream* stream,
                         DexTypes& types,
                         std::string_view shorty_idx,
                         std::uint32_t return_type_idx,
@@ -122,7 +140,20 @@ namespace shuriken {
                 /// @param offset offset where to read the protos
                 /// @param strings object with all the strings from the dex
                 /// @param types object with all the types from the dex
+                /// @deprecated refactoring in progress
                 void parse_protos(common::ShurikenStream& stream,
+                                  std::uint32_t number_of_protos,
+                                  std::uint32_t offset,
+                                  DexStrings& strings,
+                                  DexTypes& types);
+
+                /// @brief Parse all the ProtoIDs from the file
+                /// @param stream stream with dex file
+                /// @param number_of_protos number of protos to read
+                /// @param offset offset where to read the protos
+                /// @param strings object with all the strings from the dex
+                /// @param types object with all the types from the dex
+                void parse_protos(shurikenapi::IShurikenStream* stream,
                                   std::uint32_t number_of_protos,
                                   std::uint32_t offset,
                                   DexStrings& strings,
