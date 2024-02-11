@@ -35,9 +35,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(${PROJECT_NAME} SHARED  src/plugin.cpp
                                     src/dexview.cpp
-                                    src/dexviewtype.cpp)
+                                    src/dexviewtype.cpp
+                                    src/datastream.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE binaryninjaapi)
+target_link_libraries(${PROJECT_NAME} PRIVATE binaryninjaapi shuriken)
 
 
 target_include_directories(${PROJECT_NAME} PUBLIC ./inc)
