@@ -203,7 +203,7 @@ namespace shuriken {
 
         // TODO: depreciate
         std::unique_ptr<dex::Parser> parse_dex(const std::string& file_path) {
-            std::ifstream ifs(file_path);
+            std::ifstream ifs(file_path, std::ios::binary);
             if (!ifs.is_open())
                 throw std::runtime_error("unable to open file: " + file_path);
  
